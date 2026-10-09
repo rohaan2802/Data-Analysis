@@ -1,108 +1,269 @@
-# Data Analysis — Olist E-commerce T-SQL, ER Modeling, and Northwind
+# Data Analysis — Olist E-commerce T-SQL, ER Modeling & Northwind
 
-Database coursework in **T-SQL (SQL Server)**: **Assignment #01** ER diagrams (draw.io), **Assignment #02** schema + `BULK INSERT` + analytical queries on the **Olist Brazilian e-commerce** dump, exported CSV/PNG result packs, and a separate **Northwind** sample-database script for extra practice.
+[![T-SQL](https://img.shields.io/badge/stack-T--SQL%20%7C%20SQL%20Server-CC2927)](Assignment%20%2302/Assignment_2_i222327/Assignment%20%2302_SQL.sql)
+[![Screenshots](https://img.shields.io/badge/screenshots-20%20labelled-0B5FFF)](#feature-screenshots-20)
+[![Dataset](https://img.shields.io/badge/dataset-Olist%20Brazilian%20e--commerce-1B7A4B)](#problem-statement--academic-context)
 
-**Author:** Mohammad Rohaan · **22I-2327** · [rohaan2802](https://github.com/rohaan2802)  
-GitHub language: **TSQL**. Canonical assignment script: `Assignment #02/Assignment_2_i222327/Assignment #02_SQL.sql`.
+Database coursework in **T-SQL (SQL Server)**:
+
+- **Assignment #01** — ER diagrams (draw.io + PNG)
+- **Assignment #02** — `ECOMMERCE` schema, `BULK INSERT`, 32 analytical queries on **Olist**
+- Exported **CSV + chart** packs for Order / Customer / Product / Seller themes
+- **Northwind** sample DB script for extra practice
+- **20 labelled feature screenshots** + SSMS runbook / FK-safe load order
+
+**Author:** Mohammad Rohaan · **Roll:** 22I-2327 · [rohaan2802](https://github.com/rohaan2802)
+
+Canonical script: [`Assignment #02/Assignment_2_i222327/Assignment #02_SQL.sql`](Assignment%20%2302/Assignment_2_i222327/Assignment%20%2302_SQL.sql)
+
+---
+
+## Live demo
+
+There is no hosted web app — the “demo” is the graded SQL + exported charts. Open these directly:
+
+Primary analysis pack (Order / Customer / Product / Seller folders):
+
+https://github.com/rohaan2802/Data-Analysis/tree/main/Assignment%20%2302/Assignment_2_i222327
+
+Canonical T-SQL script:
+
+https://github.com/rohaan2802/Data-Analysis/blob/main/Assignment%20%2302/Assignment_2_i222327/Assignment%20%2302_SQL.sql
+
+Labelled screenshot gallery (this README):
+
+https://github.com/rohaan2802/Data-Analysis/tree/main/docs/screenshots
+
+Assignment #01 ER diagrams:
+
+https://github.com/rohaan2802/Data-Analysis/tree/main/Assignment%20%2301
+
+Northwind practice script:
+
+https://github.com/rohaan2802/Data-Analysis/blob/main/NorthWind%20DataBase/NorthWind%20DataBase.sql
+
+---
 
 ## Table of contents
 
-- [Screenshots / project demo](#screenshots--project-demo)
-- [Problem statement / academic context](#problem-statement--academic-context)
-- [Features](#features)
-- [Architecture / design](#architecture--design)
-- [File-by-file reference](#file-by-file-reference)
-- [Olist schema](#olist-schema)
-- [Bulk load (CSV → SQL Server)](#bulk-load-csv--sql-server)
-- [Analysis questions A–H (as written)](#analysis-questions-ah-as-written)
-- [Exported result highlights](#exported-result-highlights)
-- [Assignment #01 — ER modeling](#assignment-01--er-modeling)
-- [Northwind](#northwind)
-- [Tech stack](#tech-stack)
-- [Project structure](#project-structure)
-- [Prerequisites and install](#prerequisites-and-install)
-- [How to build and run](#how-to-build-and-run)
-- [Known limitations / bugs](#known-limitations--bugs)
-- [How to extend](#how-to-extend)
-- [Author](#author)
+1. [Live demo](#live-demo)
+2. [Quick start](#quick-start)
+3. [Feature screenshots (20)](#feature-screenshots-20)
+4. [Deep feature walkthrough](#deep-feature-walkthrough)
+5. [Problem statement / academic context](#problem-statement--academic-context)
+6. [Features](#features)
+7. [Architecture / design](#architecture--design)
+8. [Extra docs pack](#extra-docs-pack)
+9. [Olist schema](#olist-schema)
+10. [Bulk load (CSV → SQL Server)](#bulk-load-csv--sql-server)
+11. [Analysis questions A–H](#analysis-questions-ah-as-written)
+12. [Exported result highlights](#exported-result-highlights)
+13. [Assignment #01 — ER modeling](#assignment-01--er-modeling)
+14. [Northwind](#northwind)
+15. [Tech stack](#tech-stack)
+16. [Project structure](#project-structure)
+17. [Prerequisites](#prerequisites-and-install)
+18. [How to build and run](#how-to-build-and-run)
+19. [Known limitations](#known-limitations--bugs)
+20. [How to extend](#how-to-extend)
+21. [Author](#author)
 
-## Screenshots / project demo
+---
 
-Key visuals from Assignment #01–#02 so you can see the working analysis without opening SSMS first. Full chart packs also sit under each `*_ANALYSIS` folder.
+## Quick start
 
-### ER model (Assignment #01)
+1. Open the [Live demo](#live-demo) links (full URLs — not “click here”).
+2. Skim [Feature screenshots (20)](#feature-screenshots-20).
+3. Follow [`docs/ssms-runbook.md`](docs/ssms-runbook.md) + [`docs/load-order.md`](docs/load-order.md).
+4. Edit every `BULK INSERT ... FROM` path in the SQL file, then execute in SSMS.
 
-Conceptual ER diagram for customers, orders, items, shipping, and payments.
+---
 
-![ER diagram](docs/screenshots/01-er-diagram.png)
+## Feature screenshots (20)
 
-### Peak months of order delays
+Old `docs/screenshots` embeds were replaced with this labelled set (optimized JPGs). Each heading is one project feature.
 
-Orders delivered after the estimated date, grouped by month. April is the worst month (**1,565** delays), July the lightest (**216**).
+### 1. ER Task 1 — customers & orders
 
-![Peak months of order delays](docs/screenshots/02-order-peak-delay-months.png)
+Assignment #01 conceptual model linking customers, orders, and core commerce entities.
 
-### Order delays by customer state
+![ER Task 1](docs/screenshots/01-er-task1-customers-orders.jpg)
 
-Geographic view of late deliveries. **SP** leads with **2,387** delayed orders, followed by RJ and MG.
+### 2. ER Task 3 — shipping & payments
 
-![Order delays by state](docs/screenshots/03-order-delays-by-state.png)
+Extended ER covering shipment and payment relationships.
 
-### Average order price by state
+![ER Task 3](docs/screenshots/02-er-task3-shipping-payments.jpg)
 
-Customer spend by Brazilian state. **PB** is highest (~**248.33**); **SP** is lowest among the listed states (~**137.50**).
+### 3. ER Task 5 — extended model
 
-![Average order price by state](docs/screenshots/04-customer-avg-price-by-state.png)
+Further section-A modeling refinements from Assignment #01.
 
-### Revenue by product category
+![ER Task 5](docs/screenshots/03-er-task5-extended-model.jpg)
 
-Delivered sales revenue with English category names. Top categories: **health_beauty**, **watches_gifts**, and **bed_bath_table**.
+### 4. Order — peak months of delays
 
-![Revenue by product category](docs/screenshots/05-product-revenue-by-category.png)
+Late deliveries (`delivered_customer > estimated`) by month. April peaks (**1,565**); July is lightest (**216**).
 
-### Order delays by product category
+![Order peak delay months](docs/screenshots/04-order-peak-delay-months.jpg)
 
-Which product categories see the most late deliveries — useful for spotting fulfillment risk by catalog segment.
+### 5. Order — delays by customer state
 
-![Order delays by product category](docs/screenshots/06-order-delays-by-category.png)
+Geographic late-delivery counts. **SP** leads (**2,387**), then RJ and MG.
 
-### Average review score by category
+![Order delays by state](docs/screenshots/05-order-delays-by-state.jpg)
 
-Mean customer review (1–5) per product category. High scores with tiny sample sizes (e.g. fashion children’s clothes) should be read carefully.
+### 6. Order — average delay days by seller
 
-![Average review score by category](docs/screenshots/07-product-avg-review-by-category.png)
+Which sellers show the longest mean delay (days after estimate).
 
-### Top product category by state
+![Order avg delay by seller](docs/screenshots/06-order-avg-delay-by-seller.jpg)
 
-Most profitable category (total sales) in each customer state — e.g. SP led by bed/bath, RJ by watches/gifts.
+### 7. Order — delays by product category
 
-![Top product category by state](docs/screenshots/08-product-top-category-by-state.png)
+Fulfillment risk by catalog segment (`product_catery_name`).
 
-### Seller profit margin proxy
+![Order delays by category](docs/screenshots/07-order-delays-by-category.jpg)
 
-Per-seller margin as `(price − freight) / price`. This uses freight as a cost stand-in, not true COGS.
+### 8. Customer — average order price by state
 
-![Seller profit margin](docs/screenshots/09-seller-profit-margin.png)
+Mean `payment_value` by `customer_state`. **PB** highest (~**248.33**); **SP** lowest among listed (~**137.50**).
+
+![Customer avg price by state](docs/screenshots/08-customer-avg-price-by-state.jpg)
+
+### 9. Customer — longest average delivery time
+
+Customers with the highest mean purchase→delivery duration (delivered orders).
+
+![Customer longest delivery](docs/screenshots/09-customer-longest-delivery-time.jpg)
+
+### 10. Customer — highest cancellations
+
+Customers ranked by canceled-order counts (assignment wording: “cancellations”).
+
+![Customer cancellations](docs/screenshots/10-customer-highest-cancellations.jpg)
+
+### 11. Product — top category by state
+
+Most profitable category (total sales) inside each customer state.
+
+![Product top category by state](docs/screenshots/11-product-top-category-by-state.jpg)
+
+### 12. Product — peak order hours by category
+
+Hour-of-day with the most placements per category (e.g. bed/bath hour **14**).
+
+![Product peak hours](docs/screenshots/12-product-peak-order-hours.jpg)
+
+### 13. Product — price vs sales volume
+
+How average product price relates to delivered order volume.
+
+![Product price vs volume](docs/screenshots/13-product-price-vs-sales-volume.jpg)
+
+### 14. Product — frequently bought together
+
+Self-joined product pairs that co-occur on orders (`product_id < product_id`).
+
+![Bought together](docs/screenshots/14-product-frequently-bought-together.jpg)
+
+### 15. Product — revenue by category (English)
+
+Delivered `SUM(price)` with PT→EN translation. Top: **health_beauty**, **watches_gifts**, **bed_bath_table**.
+
+![Revenue by category](docs/screenshots/15-product-revenue-by-category.jpg)
+
+### 16. Product — average review by category
+
+Mean review score (1–5). Tiny-n categories can show perfect 5s — interpret carefully.
+
+![Avg review by category](docs/screenshots/16-product-avg-review-by-category.jpg)
+
+### 17. Seller — cancel rate (“return rate” label)
+
+Canceled item-rows / all item-rows × 100. Small sellers can hit 100% with n=1.
+
+![Seller cancel rate](docs/screenshots/17-seller-cancel-rate.jpg)
+
+### 18. Seller — highest average product price
+
+Sellers ranked by `AVG(price)` on delivered items.
+
+![Seller highest avg price](docs/screenshots/18-seller-highest-avg-price.jpg)
+
+### 19. Seller — profit margin proxy
+
+`(price − freight) / price`. Freight is **shipping**, not COGS — treat as a proxy only.
+
+![Seller margin proxy](docs/screenshots/19-seller-profit-margin-proxy.jpg)
+
+### 20. Seller — total freight cost
+
+`SUM(freight_value)` per seller on delivered items — logistics cost concentration.
+
+![Seller total freight](docs/screenshots/20-seller-total-freight-cost.jpg)
+
+---
+
+## Deep feature walkthrough
+
+### A. ER modeling (screenshots 01–03)
+
+Assignment #01 builds the conceptual backbone before SQL: entities, keys, and relationships for commerce (customers, orders, payments, shipping). Open `.drawio` in [diagrams.net](https://app.diagrams.net/) to edit; PNGs are the graded visuals.
+
+### B. Order analytics (04–07)
+
+Delay is defined when customer delivery is **after** the estimated date. Features answer: *when* delays peak (month), *where* (state), *which sellers* are slowest, and *which categories* suffer most. Uses `DATEDIFF`, `DATEPART`/`MONTH`, and joins through `Orders` → `Customers` / `Order_Items` → `Products`.
+
+### C. Customer analytics (08–10)
+
+Spend concentration by state, delivery-time outliers, and cancellation heavy-hitters. Helps separate “many late deliveries in SP because volume is huge” from “individual customers with extreme lead times.”
+
+### D. Product analytics (11–16)
+
+Catalog intelligence: regional category winners, time-of-day demand, price–volume relationship, market-basket pairs, translated revenue leaderboard, and review quality by category. English names come from `product_category_name_translation` (table spelling keeps `catery`).
+
+### E. Seller & shipment analytics (17–20)
+
+Seller health proxies: cancel rate (mislabelled “return” in the brief), average selling price, freight-based margin proxy, and total freight. Always read small-n artefacts (100% cancel with one order).
+
+### F. Schema + constraints
+
+PKs/FKs/`CHECK`s encode domain rules: order status enum, payment types, review scores 1–5, geo lat/lng ranges, timestamp ordering (approved ≥ purchase, etc.). Several FKs use `ON DELETE CASCADE`.
+
+### G. Bulk load + geo dedupe
+
+UTF-8 `BULK INSERT` with `FIRSTROW = 2`, often `TABLOCK` / `KEEPNULLS`. Geolocation uses a **staging** table + `ROW_NUMBER()` CTE so one lat/lng survives per `(zip, city, state)`.
+
+### H. Northwind sidecar
+
+Separate Microsoft sample for views/procedures practice — **not** joined to Olist.
+
+---
 
 ## Problem statement / academic context
 
-Olist is a Brazilian marketplace: customers, sellers, orders, payments, items, reviews, products, geolocation, and Portuguese→English category names. Assignment 02 asks you to **create an `ECOMMERCE` database**, load the official CSVs with **`BULK INSERT`**, enforce CHECKs and FKs, **deduplicate geolocation**, then answer **four blocks of questions** (Order / Customer / Product / Seller-and-shipment), each labeled **a–h** in the SQL comments. Results were saved as CSVs and PNGs under `CUSTOMER ANALYSIS`, `ORDER ANALYSIS`, `PRODUCT ANALYSIS`, and `SELLER AND SHIPMENT ANALYSIS`.
+Olist is a Brazilian marketplace dump: customers, sellers, orders, payments, items, reviews, products, geolocation, and Portuguese→English categories. Assignment 02: create **`ECOMMERCE`**, load CSVs, enforce integrity, dedupe geo, then answer **four thematic blocks** (Order / Customer / Product / Seller-and-shipment), each with questions **a–h**. Results live under the four `*_ANALYSIS` folders.
+
+---
 
 ## Features
 
-- `CREATE DATABASE ECOMMERCE` + `USE ECOMMERCE` with `GO` batches.
-- Tables with PKs, FKs (`ON DELETE CASCADE` on several), and domain CHECKs (order status list, payment types, review scores 1–5, lat/lng ranges).
-- UTF-8 bulk load: `CODEPAGE = '65001'`, `FIRSTROW = 2`, `KEEPNULLS` / `TABLOCK` where specified.
-- Geolocation **staging** table + `ROW_NUMBER()` CTE to keep one lat/lng per `(zip, city, state)`.
-- 32 analysis `SELECT`s (8 per theme) using `DATEDIFF`, `DATEPART`, `YEAR`/`MONTH`, window-style max-per-group subqueries, and `UNION ALL`.
-- End-of-file note on **why `TABLOCK`** speeds bulk insert (minimal logging, lock escalation).
-- Assignment 01: three section-A draw.io models (+ PNG exports).
-- Northwind: Microsoft-style `CREATE DATABASE Northwind` script (~1 MB) with tables, views, and procedures.
-- README screenshots under `docs/screenshots/` for a quick visual demo.
+- `CREATE DATABASE ECOMMERCE` + `USE` + `GO` batches
+- Tables with PKs, FKs (`ON DELETE CASCADE` on several), domain `CHECK`s
+- UTF-8 bulk load (`CODEPAGE = '65001'`) where specified
+- Geolocation staging + `ROW_NUMBER()` dedupe
+- 32 analysis `SELECT`s (8 × 4 themes)
+- Exported CSV/PNG evidence packs
+- Assignment #01 draw.io ER set
+- Northwind installer script
+- 20 README screenshots + docs runbook / load-order / query index
+
+---
 
 ## Architecture / design
 
-```
+```text
 olist_*.csv  ──BULK INSERT──►  ECOMMERCE (SQL Server)
                                       │
                     Task 1: DDL + cleaning (geo CTE, CHECKs)
@@ -110,71 +271,65 @@ olist_*.csv  ──BULK INSERT──►  ECOMMERCE (SQL Server)
                     Task 2: retrieval (Order / Customer / Product / Seller)
                                       │
                          CSV + PNG exports (SSMS / Excel)
+                                      │
+                         docs/screenshots (README gallery)
 ```
 
-**Load order that actually satisfies FKs** (the `.sql` file itself creates `Customers` *before* `Geolocation` and `Products` *before* `Product_Catery_Name_Translation`). Create **Geolocation** and **Product_Catery_Name_Translation** first, then Customers / Sellers / Products, then Orders and children. See [Known limitations](#known-limitations--bugs).
+**FK-safe create order:** Geolocation + category translation **first**, then Customers / Sellers / Products, then Orders and children. Details: [`docs/load-order.md`](docs/load-order.md).
 
-## File-by-file reference
+---
 
-| Path | Role |
-|------|------|
-| `Assignment #02/Assignment_2_i222327/Assignment #02_SQL.sql` | Full T-SQL (GitHub). |
-| `Assignment #02/Assignment_2_i222327/olist_*.csv` | Olist dumps used for bulk insert. |
-| `product_category_name_translation.csv` | Category PT→EN. |
-| `Date_Time Format.txt` | `yyyy-MM-dd HH:mm:ss` |
-| `CUSTOMER ANALYSIS/*.csv`, `*.png` | Customer queries C, E, H (and charts). |
-| `ORDER ANALYSIS/` | Order queries B, C, E, G. |
-| `PRODUCT ANALYSIS/` | Product queries A, B, D, E, F, G. |
-| `SELLER AND SHIPMENT ANALYSIS/` | Seller queries A, B, C, G. |
-| `docs/screenshots/` | Key PNGs embedded in the README demo section. |
-| `Assignment #02/Brazilian_Dataset/` | Second copy of the nine CSVs. |
-| `Assignment #01/*.drawio`, `*.png`, `.docx`, `.pdf` | ER modeling. |
-| `NorthWind DataBase/NorthWind DataBase.sql` | Classic Northwind install script. |
+## Extra docs pack
 
-Not every a–h query has a CSV in those folders (only the listed letters). Numbers in [Exported result highlights](#exported-result-highlights) come from those CSVs, not from invented query runs.
+| Doc | Role |
+|-----|------|
+| [`docs/ssms-runbook.md`](docs/ssms-runbook.md) | End-to-end SSMS steps |
+| [`docs/load-order.md`](docs/load-order.md) | Parent/child create + load order |
+| [`docs/query-index.md`](docs/query-index.md) | Which a–h letters have exports |
+| [`docs/README.md`](docs/README.md) | Docs map |
+| [`LICENSE`](LICENSE) | MIT for coursework packaging |
+| [`TREE.txt`](TREE.txt) | Layout snapshot |
+
+---
 
 ## Olist schema
 
-Column `product_catery_name` is spelled that way **on purpose** (matches a misspelling used throughout the script and the translation table).
+Column `product_catery_name` spelling is intentional (matches the script + translation table).
 
 | Table | Keys / CHECKs (from DDL) |
 |-------|--------------------------|
-| `Geolocation` | PK `(geolocation_zip_code_prefix, geolocation_city, geolocation_state)`; zip `> 0`; lat −90…90; lng −180…180; state `LEN = 2`. |
-| `Geolocation_Staging` | Same columns without the 2-letter state CHECK; dropped after insert. |
-| `Customers` | PK `customer_id` ≠ `''`; `customer_unique_id` ≠ `''`; zip `> 0`; FK to Geolocation **ON DELETE CASCADE**. |
-| `Sellers` | PK `seller_id`; zip `> 0`; FK to Geolocation. |
-| `Product_Catery_Name_Translation` | PK Portuguese name; English name `NOT NULL`. |
-| `Products` | PK `product_id`; FK category name; photos 0–50; name length ≥ 1; dimensions `> 0` where set. |
-| `Orders` | PK `order_id`; status **IN** `delivered, shipped, processing, canceled, unavailable, invoiced, created, approved`; FKs to Customers CASCADE; CHECKs: approved ≥ purchase, carrier ≥ approved, customer delivery after carrier and purchase, estimate ≥ purchase. Timestamps nullable. |
-| `Order_Payments` | PK `(order_id, payment_sequential)`; sequential ≥ 1; type **IN** `credit_card, boleto, voucher, debit_card, not_defined`; installments `> 0`; value ≥ 0. |
-| `Order_Items` | PK `(order_id, order_item_id)`; FKs to Orders, Products, Sellers CASCADE; `price` and `freight_value` ≥ 0. |
-| `Order_Reviews` | PK `(review_id, order_id)`; score **1–5**; answer timestamp ≥ creation when both set. |
+| `Geolocation` | PK `(zip, city, state)`; lat/lng ranges; state length 2 |
+| `Geolocation_Staging` | Raw load; dropped after CTE insert |
+| `Customers` | PK `customer_id`; FK Geolocation CASCADE |
+| `Sellers` | PK `seller_id`; FK Geolocation |
+| `Product_Catery_Name_Translation` | PK Portuguese name → English |
+| `Products` | PK `product_id`; FK category; dimension CHECKs |
+| `Orders` | Status enum; timestamp ordering CHECKs; FK Customers CASCADE |
+| `Order_Payments` | PK `(order_id, sequential)`; payment-type enum |
+| `Order_Items` | PK `(order_id, item_id)`; FKs Orders/Products/Sellers |
+| `Order_Reviews` | Score 1–5; answer ≥ creation when both set |
+
+---
 
 ## Bulk load (CSV → SQL Server)
 
-This is **T-SQL / SQL Server**, not MySQL. Pattern used throughout:
-
 ```sql
 BULK INSERT Orders
-FROM 'C:\Users\ALLEN PROGRAMMER\Downloads\olist_orders_dataset.csv'
+FROM 'C:\PATH\TO\olist_orders_dataset.csv'
 WITH (
     FORMAT = 'CSV',
     FIELDTERMINATOR = ',',
-    ROWTERMINATOR = '\n',   -- some tables use '0x0A'
+    ROWTERMINATOR = '\n',
     FIRSTROW = 2,
-    CODEPAGE = '65001',     -- UTF-8 (not on every statement)
-    KEEPNULLS,              -- Orders, Products, Reviews
+    CODEPAGE = '65001',
+    KEEPNULLS,
     TABLOCK
 );
 ```
 
-**Replace every `FROM` path** before running. Original machine: `C:\Users\ALLEN PROGRAMMER\Downloads\`. Point the nine Olist files plus `product_category_name_translation.csv` at your copies under `Assignment_2_i222327/` or `Brazilian_Dataset/`.
+**Replace every `FROM` path** before running. Original machine path was `C:\Users\ALLEN PROGRAMMER\Downloads\`. Point at `Assignment_2_i222327/` or `Brazilian_Dataset/`.
 
-Customers’ `BULK INSERT` in the script **omits** `CODEPAGE` (Orders/Payments/Products include `65001`). `Order_Items` / Reviews / geo use `DATAFILETYPE = 'char'` and `ROWTERMINATOR = '0x0A'`. Date strings must match `yyyy-MM-dd HH:mm:ss` (`Date_Time Format.txt`).
-
-**MySQL users:** there is no `LOAD DATA` script here. Equivalent would be `LOAD DATA LOCAL INFILE` with UTF-8 and a matching schema; CHECKs and `DATEDIFF`/`DATEPART` need dialect changes. The submitted work is SQL Server.
-
-Geolocation insert (after staging load):
+Geolocation dedupe pattern:
 
 ```sql
 WITH UniqueGeo AS (
@@ -188,153 +343,152 @@ INSERT INTO Geolocation (...)
 SELECT ... FROM UniqueGeo WHERE rn = 1;
 ```
 
-A commented `GROUP BY` + `MIN(lat/lng)` alternative sits above the CTE.
+This repo is **SQL Server / T-SQL**, not MySQL.
+
+---
 
 ## Analysis questions A–H (as written)
 
-Wording below is from the SQL comments (typos included). “RETURN MORE THAN 10” is an assignment output-size hint.
+Wording below follows the SQL comments (including typos). Full export coverage: [`docs/query-index.md`](docs/query-index.md).
 
 ### Order analysis
 
-| | Question | Query idea |
-|--|----------|------------|
-| a | Percentage of orders that delayed beyond the estimated date | `%` where `delivered_customer > estimated` |
-| b | Peak months of order delays? (RETURN MORE THAN 10) | `MONTH(...)` counts |
-| c | Which state experiences the highest order delays? | Join `Customers`, group by `customer_state` |
-| d | How many orders are still in “pending” status for each year | `order_status = 'processing'` |
-| e | Average delay duration per seller? | `AVG(DATEDIFF(DAY, estimated, delivered))` |
-| f | How do shipping costs impact order delays? | Avg `freight_value` Delayed vs On-Time |
-| g | Which product catery experience the most order delays | Count delays by `product_catery_name` |
-| h | How do number of items per order affect the delays? | Avg items Delayed vs On-Time (`SUM(order_item_id)` as `item_count`) |
+| | Question | Idea |
+|--|----------|------|
+| a | % orders delayed beyond estimate | `delivered_customer > estimated` |
+| b | Peak months of delays | Monthly counts |
+| c | State with highest delays | Join customers, group state |
+| d | Pending (`processing`) per year | Status filter |
+| e | Avg delay duration per seller | `AVG(DATEDIFF(...))` |
+| f | Shipping cost vs delays | Freight avg delayed vs on-time |
+| g | Category with most delays | Count by `product_catery_name` |
+| h | Items per order vs delays | Item aggregation delayed vs on-time |
 
 ### Customer analysis
 
-| | Question | Query idea |
-|--|----------|------------|
-| a | What percentage of customers have made only one order? | `customer_unique_id` with `COUNT(order_id)=1` |
-| b | Top five cities with the most repeat customers | `HAVING COUNT(order_id) > 1`, `TOP 5` cities |
-| c | Average order price of customers for each state | `AVG(payment_value)` |
-| d | Top ten customers with the highest number of orders | `TOP 10` by order count |
-| e | Which customers have the longest average delivery time | `AVG(DATEDIFF(DAY, approved, delivered))` for delivered |
-| f | Average number of orders placed per customer per year | `COUNT(orders)/COUNT(DISTINCT unique_id)` |
-| g | Which top 5 customers have spent the most money in year 2017 | Delivered, 2017 window, `SUM(payment_value)` |
-| h | Which customers have the highest order cancellations | `order_status = 'canceled'` |
+| | Question | Idea |
+|--|----------|------|
+| a | % one-time customers | `COUNT(order_id)=1` |
+| b | Top 5 cities with repeat customers | `HAVING COUNT > 1` |
+| c | Avg order price by state | `AVG(payment_value)` |
+| d | Top 10 customers by order count | `TOP 10` |
+| e | Longest avg delivery time | `AVG(DATEDIFF(...))` |
+| f | Avg orders per customer per year | Orders / distinct customers |
+| g | Top spenders in 2017 | Delivered + year window |
+| h | Highest cancellations | `order_status = 'canceled'` |
 
 ### Product analysis
 
-| | Question | Query idea |
-|--|----------|------------|
-| a | Most profitable product catery per state (total sales) | Max `SUM(price)` category per `customer_state` |
-| b | Peak hours for order placements per product catery | Hour with max count per category |
-| c | Top 5 product cateries with the highest number of delayed orders | English names via translation |
-| d | Impact of product price on sales volume | Avg price vs `COUNT` of delivered orders |
-| e | Most frequently bought together product pairs | Self-join `product_id < product_id` |
-| f | Total revenue per product catery | `SUM(price)` delivered, English name |
-| g | Average review score for each product catery | `AVG(review_score)` |
-| h | Top 5 products based on total sales revenue | `TOP 5` `SUM(price)` |
+| | Question | Idea |
+|--|----------|------|
+| a | Most profitable category per state | Max `SUM(price)` |
+| b | Peak hours per category | Hour with max count |
+| c | Top 5 categories by delayed orders | With EN names |
+| d | Price vs sales volume | Avg price vs counts |
+| e | Bought-together pairs | Self-join |
+| f | Revenue per category | Delivered `SUM(price)` |
+| g | Avg review per category | `AVG(review_score)` |
+| h | Top 5 products by revenue | `TOP 5 SUM(price)` |
 
 ### Seller and shipment analysis
 
-| | Question | Query idea |
-|--|----------|------------|
-| a | What is the return rate per seller? | Canceled item-rows / all item-rows × 100 (**cancellations**, not returns) |
-| b | Sellers whose products have the highest average price | `AVG(price)` on delivered |
-| c | Profit margin per seller | `(price − freight_value)` and that as % of `SUM(price)` |
-| d | Average shipping cost delayed vs non-delayed | `UNION ALL` two avgs |
-| e | Number of delayed shipments in 2017 | Count delivered late, purchase year 2017 |
-| f | Correlation between shipping cost and delivery speed | Same freight avg delayed vs on-time as (d) |
-| g | Sum the total freight cost for each seller | `SUM(freight_value)` delivered |
+| | Question | Idea |
+|--|----------|------|
+| a | “Return” rate per seller | Cancel rate on item rows |
+| b | Highest avg product price | `AVG(price)` |
+| c | Profit margin per seller | `(price − freight)/price` |
+| d | Shipping cost delayed vs not | Two avgs / `UNION ALL` |
+| e | Delayed shipments in 2017 | Year filter |
+| f | Freight vs delivery speed | Same comparison family as (d) |
+| g | Total freight per seller | `SUM(freight_value)` |
+
+---
 
 ## Exported result highlights
 
-From the GitHub CSV packs (headers as exported):
+From the GitHub CSV packs:
 
-**Order B — delays by month:** April **1565**, March **1145**, August **996**, then Dec 767 … July **216** (12 months).
+- **Order B:** Apr **1565** … Jul **216** delays  
+- **Order C:** SP **2387**, RJ **1664**, MG **638** …  
+- **Customer C:** PB **~248.33** highest mean payment; SP **~137.50**  
+- **Product F:** `health_beauty` **~1.23M**, `watches_gifts` **~1.17M**, `bed_bath_table` **~1.02M**  
+- **Seller C:** head margins **~98.9%** on the freight proxy (not true COGS)
 
-**Order C — delays by state (top / bottom):** SP **2387**, RJ **1664**, MG **638**, … AC **3**, AP **3**.
-
-**Order E — mean delay days by seller (head):** **167**, **159**, **134**, **132**, **100** days (seller ids in the CSV).
-
-**Customer C — mean payment by state:** PB **248.33** (highest), AC 234.29, … SP **137.50** (lowest of the 27 rows).
-
-**Customer H — cancellations:** one `customer_unique_id` with **3** canceled orders; several with **2**; long tail of **1**.
-
-**Product A — top category sales by state:** SP `cama_mesa_banho` **478284.52**; RJ `relogios_presentes` **185379.65**; MG `beleza_saude` **157558.30**.
-
-**Product B — peak order hour (examples):** `cama_mesa_banho` hour **14**, count **802**; `beleza_saude` hour **16**, **697**.
-
-**Product F — revenue (English names, delivered `SUM(price)`):** `health_beauty` **1,233,131.72**; `watches_gifts` **1,166,176.98**; `bed_bath_table` **1,023,434.76**; lowest listed `security_and_services` **283.29**.
-
-**Product G — mean review (exported as integers):** `fashion_childrens_clothes` **5** (7 reviews); many categories **4**; `telephony` / `office_furniture` / `bed_bath_table` **3**; `security_and_services` **2** (2 reviews). SQL uses `ROUND(AVG(...), 2)`; the CSV dump is coarsened.
-
-**Seller A — “return” %:** several sellers at **100%** with `TotalOrders=1` and `CanceledOrders=1` (small-n artefact).
-
-**Seller B — mean product price (head):** **6735**, **6729**, **6499**.
-
-**Seller C — “profit margin %” (head):** **98.90%**, **98.73%**, **98.66%** on `(price − freight)/price` — freight is shipping, not COGS.
+---
 
 ## Assignment #01 — ER modeling
 
-- `DB_Assignment#1.pdf` — brief  
-- `i222327_DB_Assignment#01.docx` — write-up  
-- `i222327_TASK_1_sec_A.drawio` + PNG  
-- `i222327_TASK_3_sec_A.drawio` + PNG  
-- `i222327_TASK_5_sec_A.drawio` + PNG  
+- `DB_Assignment#1.pdf`, `i222327_DB_Assignment#01.docx`
+- Tasks 1 / 3 / 5 `.drawio` + PNG (screenshots 01–03)
 
-Open `.drawio` in [diagrams.net](https://app.diagrams.net/). A README copy is at [`docs/screenshots/01-er-diagram.png`](docs/screenshots/01-er-diagram.png).
+---
 
 ## Northwind
 
-`NorthWind DataBase/NorthWind DataBase.sql` is the classic **Microsoft Northwind** T-SQL installer (copyright header 1994–2000): `CREATE DATABASE Northwind`, then drop/recreate **Employees, Categories, Customers, Shippers, Suppliers, Orders, Products, Order Details**, plus Region/Territories/demographics, views (`Invoices`, `Order Subtotals`, `Sales by Category`, …), and procedures (`CustOrderHist`, `Ten Most Expensive Products`, …). **Purpose:** standalone SQL Server practice, **not** joined to Olist. Run in SSMS against a server where you may create `Northwind`. Default schema `dbo`, `SET DATEFORMAT mdy`.
+`NorthWind DataBase/NorthWind DataBase.sql` — classic Microsoft installer (`CREATE DATABASE Northwind`, tables, views, procedures). Standalone practice DB; not linked to Olist.
+
+---
 
 ## Tech stack
 
-- SQL Server (Express/Developer) + SSMS or `sqlcmd`
-- T-SQL: `BULK INSERT`, `GO`, `DATEDIFF`, `DATEPART`, `TOP`, `CTE`
-- Olist CSVs (UTF-8); draw.io for Assignment 01
+SQL Server + SSMS/`sqlcmd` · T-SQL (`BULK INSERT`, CTE, `DATEDIFF`, `TOP`) · Olist CSVs · draw.io
+
+---
 
 ## Project structure
 
-```
+```text
 Data-Analysis/
-├── docs/screenshots/        # README demo PNGs (key visuals)
-├── Assignment #01/          # ER diagrams + brief
+├── docs/screenshots/     # 20 labelled JPGs for README
+├── docs/*.md             # runbook, load-order, query-index
+├── Assignment #01/       # ER models
 ├── Assignment #02/
-│   ├── Assignment_2_i222327/   # SQL, CSVs, analysis folders
+│   ├── Assignment_2_i222327/   # SQL + CSVs + analysis packs
 │   └── Brazilian_Dataset/      # duplicate Olist CSVs
 ├── NorthWind DataBase/
-│   └── NorthWind DataBase.sql
-└── README.md
+├── LICENSE · TREE.txt · README.md
 ```
+
+---
 
 ## Prerequisites and install
 
-SQL Server with `BULK INSERT` permission and rights to `CREATE DATABASE`. Place CSVs on a path the **SQL Server service account** can read (not only your user Downloads folder).
+SQL Server with permission to `CREATE DATABASE` and `BULK INSERT`. CSV paths must be readable by the **SQL Server service account**.
+
+---
 
 ## How to build and run
 
-1. Edit every `BULK INSERT ... FROM` path.
-2. In SSMS, create Geolocation (staging → CTE → drop staging) and `Product_Catery_Name_Translation` **before** tables that FK to them, **or** temporarily comment FKs, load, then `ALTER TABLE` add FKs.
-3. Load remaining tables; `SELECT *` probes after each load are in the script (heavy on full Olist — consider `SELECT TOP 10`).
-4. Run Task 2 blocks; compare to the analysis CSVs/PNGs (or the README screenshots under `docs/screenshots/`).
-5. Optional: `sqlcmd -S .\SQLEXPRESS -E -i "Assignment #02\Assignment_2_i222327\Assignment #02_SQL.sql"` after path fixes.
+1. Replace every `BULK INSERT` path.
+2. Follow [`docs/load-order.md`](docs/load-order.md) (or comment FKs → load → add FKs).
+3. Load tables; prefer `SELECT TOP 10` probes.
+4. Run Task 2; compare to analysis CSVs/PNGs and `docs/screenshots/`.
+5. Optional: `sqlcmd -S .\SQLEXPRESS -E -i "...Assignment #02_SQL.sql"` after path fixes.
+6. Optional: execute Northwind script separately.
 
-Northwind: open `NorthWind DataBase.sql` and execute as a separate batch (creates `Northwind`).
+---
 
 ## Known limitations / bugs
 
-- **DDL order vs FKs:** `Customers`/`Sellers` reference `Geolocation` before it is created; `Products` references the translation table before it exists. Top-to-bottom execute will fail until you reorder.
-- Typo **`catery`** everywhere; keep it or load will miss the FK.
-- Order **h** uses `SUM(order_item_id)` as item count (sum of line numbers, not `COUNT(*)`).
-- Seller **a** is cancel rate, not returns; **c** is price−freight, not COGS profit; **d** and **f** are the same freight-avg comparison.
-- Customer **h** `ORDER BY cancelled_orders_count` vs alias `Cancelled_orders_count` may fail depending on collation.
-- Analysis CSVs cover a **subset** of a–h; hard-coded Windows paths; Customers bulk insert may need `CODEPAGE`.
-- Olist / Northwind retain upstream licenses (Olist dump; Microsoft Northwind sample).
+- **DDL order vs FKs** — reorder creates (see load-order doc).
+- Typo **`catery`** must stay consistent with data.
+- Order **h** uses `SUM(order_item_id)` as item count (not `COUNT(*)`).
+- Seller **a** is cancel rate, not returns; **c** is not true COGS profit.
+- Only a **subset** of a–h queries have CSV/PNG exports.
+- Hard-coded Windows paths in the submitted SQL.
+- Duplicate Olist CSVs under `Brazilian_Dataset/` increase clone size.
+- Upstream licenses: Olist dataset + Microsoft Northwind sample.
+
+---
 
 ## How to extend
 
-- Reorder `CREATE TABLE` to match FKs; replace `SUM(order_item_id)` with `COUNT(*)`; index `order_status` / delivery dates; parameterize paths with `sqlcmd -v`.
+- Reorder DDL to match FKs; fix item-count to `COUNT(*)`; add indexes on `order_status` / delivery dates; parameterize paths with `sqlcmd -v`; add missing a–h export packs.
+
+---
 
 ## Author
 
-**Mohammad Rohaan** — 22I-2327 · [rohaan2802](https://github.com/rohaan2802)
+**Mohammad Rohaan** · Roll **22I-2327**  
+GitHub: https://github.com/rohaan2802  
+Repository: https://github.com/rohaan2802/Data-Analysis

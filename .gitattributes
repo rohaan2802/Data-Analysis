@@ -1,0 +1,9 @@
+*.sql text eol=lf
+*.md text eol=lf
+*.csv text
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
+*.zip binary
+*.drawio binary

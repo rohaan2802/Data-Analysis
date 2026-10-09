@@ -1,0 +1,18 @@
+Data-Analysis/
+├── README.md
+├── LICENSE
+├── TREE.txt
+├── .gitattributes
+├── docs/
+│   ├── README.md
+│   ├── load-order.md
+│   ├── ssms-runbook.md
+│   ├── query-index.md
+│   └── screenshots/          (20 labelled JPGs)
+├── Assignment #01/           (ER draw.io + PNG + brief)
+├── Assignment #02/
+│   ├── Assignment_2_i222327/ (SQL, Olist CSVs, analysis packs)
+│   ├── Brazilian_Dataset/    (duplicate Olist CSVs)
+│   └── *.zip / *.docx
+└── NorthWind DataBase/
+    └── NorthWind DataBase.sql
