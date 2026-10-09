@@ -30,7 +30,7 @@ Canonical T-SQL script:
 
 https://github.com/rohaan2802/Data-Analysis/blob/main/Assignment%20%2302/Assignment_2_i222327/Assignment%20%2302_SQL.sql
 
-Labelled screenshot gallery (this README):
+Labelled screenshot gallery:
 
 https://github.com/rohaan2802/Data-Analysis/tree/main/docs/screenshots
 
